@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//todo: change all buttons to this class
-
 public class Button extends AbstractComponent {
 
 

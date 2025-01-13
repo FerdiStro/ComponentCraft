@@ -3,12 +3,70 @@
  */
 package componentcraft;
 
+import componentcraft.components.Button;
+import componentcraft.label.CompCLabel;
+import componentcraft.label.CompCLabelBuilder;
+import componentcraft.util.Coordinates;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class LibraryTest {
+
+
+    public static void main(String[] args){
+        JFrame frame = new JFrame();
+
+//        Button button = new ComponentBuilder()
+//                .addCustomConstructor("test")
+//                .setCoordinates(new Coordinates(200, 100))
+//                .setDimension(new Dimension(100, 200))
+//                .build(Button.class);
+//
+        Button button =  new Button(new Coordinates(200, 100), new Dimension(100, 200), "test");
+
+        button.setFancy(true);
+        button.setStateButton();
+
+
+
+        button.addClickListener( () -> {
+            button.setVisible(false);
+        });
+
+//        MultipleComponentMenuHorizontal build1 = new ComponentBuilder()
+//                .setCoordinates(new Coordinates(200, 100))
+//                .setDimension(new Dimension(100, 200))
+//                .build(MultipleComponentMenuHorizontal.class);
+
+
+
+
+        CompCLabel label = new CompCLabelBuilder()
+                .addComponent(button)
+                .addResizeListener(frame)
+                .addRepaintListener(frame)
+                .activateMouseAdapter(true)
+                .build();
+
+
+
+        label.addBeforeDraw(g -> g.drawString("Hello World", 100, 100));
+
+
+
+
+
+        frame.add(label);
+        frame.setSize(800, 800);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+    }
+
     @Test public void someLibraryMethodReturnsTrue() {
-        Library classUnderTest = new Library();
-        assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
+
     }
 }

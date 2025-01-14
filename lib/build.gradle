@@ -11,7 +11,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
 
-    id 'signing'
+//    id 'signing'
 }
 
 repositories {
@@ -58,9 +58,9 @@ publishing {
     }
 }
 
-signing {
-    useGpgCmd()
-    sign configurations.runtimeElements
-}
+//signing {
+//    useGpgCmd()
+//    sign configurations.runtimeElements
+//}
 
 

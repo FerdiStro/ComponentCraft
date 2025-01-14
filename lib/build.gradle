@@ -7,11 +7,18 @@
  */
 
 plugins {
+    id 'java'
+
+
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     id 'maven-publish'
 
-//    id 'signing'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -39,14 +46,7 @@ dependencies {
 
 publishing {
     repositories {
-//        maven {
-//            name = "OSSRH"
-//            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-//            credentials {
-//                username = System.getenv("MAVEN_USERNAME")
-//                password = System.getenv("MAVEN_PASSWORD")
-//            }
-//        }
+
         maven {
             name = "GitHubPackages"
             url = "https://maven.pkg.github.com/octocat/component-craft"
@@ -57,10 +57,3 @@ publishing {
         }
     }
 }
-
-//signing {
-//    useGpgCmd()
-//    sign configurations.runtimeElements
-//}
-
-

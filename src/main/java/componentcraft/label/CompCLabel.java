@@ -2,6 +2,7 @@ package componentcraft.label;
 
 import componentcraft.components.AbstractComponent;
 import componentcraft.events.componentObserver.ComponentObserver;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +25,13 @@ public class CompCLabel extends JLabel {
     protected CompCLabel(){
         super();
     }
+
+    /**
+     * BackgroundColor which can be null or a Color to set the JFrame-Background-color
+     */
+    @Setter
+    private Color backgroundColor = Color.WHITE;
+
 
     protected void addComponent(AbstractComponent component){
         this.componentList.add(component);
@@ -48,10 +56,10 @@ public class CompCLabel extends JLabel {
 
     /**
      *
-     * @param beforeDraw is Draw. Add the after Draw-Interface
+     * @param afterDraw is Draw. Add the after Draw-Interface
      */
-    public void addAfterDraw(Draw beforeDraw){
-        this.beforeDraw = beforeDraw;
+    public void addAfterDraw(Draw afterDraw){
+        this.afterDraw = afterDraw;
     }
 
 
@@ -60,6 +68,14 @@ public class CompCLabel extends JLabel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        if(backgroundColor != null){
+            Color beforeColor = g2.getColor();
+            g2.setColor(backgroundColor);
+            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.setColor(beforeColor);
+        }
+
 
 
         if(beforeDraw != null){

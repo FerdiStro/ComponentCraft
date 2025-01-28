@@ -9,6 +9,7 @@ public class ComponentObserverType {
 
 
     public static  final int BUTTON_STATE_CHANGED = 100;
+    public static final int MULTIPLE_COMPONENTS_MENU_STATE_CHANGED = 200;
 
     public static final int REPAINT = 0;
 

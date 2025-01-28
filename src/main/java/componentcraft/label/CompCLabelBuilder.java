@@ -205,6 +205,43 @@ public class CompCLabelBuilder {
         return this;
     }
 
+    /**
+     * Is Color and can be null, when no color shout set
+     */
+    private Color backgroundColor = null;
+
+    /**
+     *
+     * @param backgroundColor is Color. Define backgroundColor of Label
+     * @return CompCLabelBuilder;
+     */
+    public CompCLabelBuilder setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+
+    /**
+     * Boolean which give state of addFrame status
+     */
+    private boolean addToFrame = false;
+    /**
+     * JFrame which the CompCLabel is added to
+     */
+    private JFrame  addFrame = null;
+
+    /**
+     *
+     * @param frame is JFrame. Frame where the label is added to
+     * @return CompCLabelBuilder;
+     */
+    public CompCLabelBuilder addToFrame(JFrame frame){
+
+        this.addToFrame = true;
+        this.addFrame = frame;
+        return this;
+    }
+
 
     /**
      * Builds the CompCLabel-class
@@ -222,6 +259,16 @@ public class CompCLabelBuilder {
         if(activateComponentListener) {
             compCLabel.setComponentObserver(componentObserver);
         }
+
+        if(addToFrame){
+            addFrame.add(compCLabel);
+        }
+
+
+        compCLabel.setBackgroundColor(backgroundColor);
+
+
     return compCLabel;
     }
+
 }

@@ -27,6 +27,11 @@ public abstract class AbstractComponent {
     @Getter
     private boolean visible = true;
 
+
+    @Getter
+    private final String name;
+
+
     private  int x;
     private  int y;
     private Coordinates coordinates;
@@ -34,24 +39,38 @@ public abstract class AbstractComponent {
     @Setter
     private Dimension dimension = new Dimension(0,0);
 
+    /**
+     * Shadow can be set if shadow shout displayed
+     */
+    @Getter
+    @Setter
+    private Shadow shadow = null;
 
 
-    public AbstractComponent( Coordinates coordinates) {
+
+    public AbstractComponent( Coordinates coordinates, String name) {
         logger.debug(LogMassagesBuilder.initMessage(this.getClass()));
         this.x = coordinates.getX();
         this.y = coordinates.getY();
         this.coordinates = coordinates;
+        this.name = name;
     }
 
-    public AbstractComponent(Coordinates coordinates, Dimension dimension) {
+    public AbstractComponent(Coordinates coordinates, Dimension dimension, String name) {
         logger.debug(LogMassagesBuilder.initMessage(this.getClass()));
         this.x = coordinates.getX();
         this.y = coordinates.getY();
         this.coordinates = coordinates;
         this.dimension =  dimension;
+        this.name = name;
     }
 
     public void draw(Graphics2D g2d) {
+        if(shadow != null){
+            if(shadow.isEnable()){
+                shadow.draw(g2d, this);
+            }
+        }
         g2d.setBackground(Color.black);
         g2d.fillRect(coordinates.getX(), coordinates.getY(), (int) dimension.getWidth(), (int) dimension.getHeight());
     }
@@ -84,6 +103,20 @@ public abstract class AbstractComponent {
     }
 
 
+
+    public void drawShadow(Graphics2D g2d, Shadow shadow){
+
+        Color berforeColor = g2d.getColor();
+
+        int shadowX = getX() + shadow.getOffsetX();
+        int shadowY = getY() + shadow.getOffsetY();
+        int transparency = shadow.getTransparency();
+
+        g2d.setColor(new Color(berforeColor.getRed(), berforeColor.getGreen(), berforeColor.getBlue(),  transparency));
+
+        g2d.fillRect(shadowX, shadowY ,getDimension().width, getDimension().height);
+        g2d.setColor(berforeColor);
+    }
 
     private OnEvent componentClickListener;
 

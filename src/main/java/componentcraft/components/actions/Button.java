@@ -1,6 +1,7 @@
-package componentcraft.components;
+package componentcraft.components.actions;
 
 
+import componentcraft.components.AbstractComponent;
 import componentcraft.events.componentObserver.ComponentObserverType;
 import componentcraft.events.OnEvent;
 import componentcraft.events.componentObserver.Source;
@@ -28,8 +29,7 @@ public class Button extends AbstractComponent {
     protected static final Logger logger = LogManager.getLogger();
 
 
-    @Getter
-    private final String name;
+
     private final BufferedImage image;
 
     private  Font font;
@@ -92,14 +92,12 @@ public class Button extends AbstractComponent {
      * @param name        name which  displayed on button a {@code String}
      */
     public Button(Coordinates coordinates, Dimension dimension, String name) {
-        super(coordinates, dimension);
-        this.name = name;
+        super(coordinates, dimension, name);
         image = null;
     }
 
     public Button(String name){
-        super(new Coordinates( 0, 0 ), new Dimension( 0, 0));
-        this.name = name;
+        super(new Coordinates( 0, 0 ), new Dimension( 0, 0), name);
         image = null;
     }
 
@@ -112,8 +110,7 @@ public class Button extends AbstractComponent {
      * @param file        file which need to refer to valid {@code BufferedImage }, displayed on button
      */
     public Button(Coordinates coordinates, Dimension dimension, File file) {
-        super(coordinates, dimension);
-        this.name = file.getName();
+        super(coordinates, dimension, file.getName());
         BufferedImage image = null;
         try {
             image = ImageIO.read(file);
@@ -131,8 +128,7 @@ public class Button extends AbstractComponent {
      * @param name        name of button - a {@code String}
      **/
     public Button(Coordinates coordinates, Font font, String name) {
-        super(coordinates, new Dimension((int) (font.getStringBounds(name, frc).getWidth()), (int) (font.getStringBounds(name, frc).getHeight())));
-        this.name = name;
+        super(coordinates, new Dimension((int) (font.getStringBounds(name, frc).getWidth()), (int) (font.getStringBounds(name, frc).getHeight())), name);
         image = null;
         this.font = font;
     }
@@ -213,9 +209,15 @@ public class Button extends AbstractComponent {
         }
 
 
-
         g2d.setColor(backgroundColor);
         g2d.setFont(usedFont);
+
+        if(getShadow() != null){
+            if(getShadow().isEnable()){
+                getShadow().draw(g2d, this);
+            }
+        }
+
 
         if (hoverActive) {
             g2d.setColor(hoverColor);
@@ -252,7 +254,7 @@ public class Button extends AbstractComponent {
 
         if (image == null) {
             g2d.setColor(stringColor);
-            String tempName = name + state;
+            String tempName = getName() + state;
 
             if(fancy){
                 DrawStringUtil.drawStringWithMaxWidth(g2d, tempName,   getCoordinates().getX() , getCoordinates().getY() + getDimension().height /2  + usedFont.getSize()/ 2, getDimension().width, true);

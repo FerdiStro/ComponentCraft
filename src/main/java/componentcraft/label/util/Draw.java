@@ -1,4 +1,4 @@
-package componentcraft.label;
+package componentcraft.label.util;
 
 import java.awt.*;
 

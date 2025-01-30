@@ -3,8 +3,15 @@
  */
 package componentcraft;
 
-import componentcraft.components.Button;
-import componentcraft.label.CompCLabel;
+
+import componentcraft.components.AbstractComponent;
+import componentcraft.components.actions.Button;
+import componentcraft.components.Shadow;
+import componentcraft.components.builder.ComponentBuilder;
+import componentcraft.components.menu.folderview.FolderTriggerEvent;
+import componentcraft.components.menu.folderview.FolderTriggerObserver;
+import componentcraft.components.menu.folderview.FolderView;
+import componentcraft.components.menu.MultipleComponentMenuHorizontal;
 import componentcraft.label.CompCLabelBuilder;
 import componentcraft.util.Coordinates;
 import org.junit.Test;
@@ -12,53 +19,132 @@ import org.junit.Test;
 import javax.swing.*;
 import java.awt.*;
 
+import java.util.*;
+import java.util.List;
+
+
 public class LibraryTest {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         JFrame frame = new JFrame();
 
-//        Button button = new ComponentBuilder()
-//                .addCustomConstructor("test")
-//                .setCoordinates(new Coordinates(200, 100))
-//                .setDimension(new Dimension(100, 200))
-//                .build(Button.class);
-//
-        Button button =  new Button(new Coordinates(200, 100), new Dimension(100, 200), "test");
 
+        Button button = new ComponentBuilder()
+                .addCustomConstructor("test1")
+                .setCoordinates(new Coordinates(50, 100))
+                .setDimension(new Dimension(100, 200))
+                .build(Button.class);
+
+
+
+
+
+        Button button3 = new ComponentBuilder()
+                .addCustomConstructor("test2")
+                .setCoordinates(new Coordinates(50, 100))
+                .setDimension(new Dimension(100, 200))
+                .build(Button.class);
+
+        Button button2 = new Button(new Coordinates(200, 100), new Dimension(100, 200), "test2");
+        button2.setFancy(true);
+        button2.setStateButton();
+
+        button.setShadow(new Shadow(5, 5, 200));
         button.setFancy(true);
         button.setStateButton();
 
 
+        List<AbstractComponent> componentList = new ArrayList<>();
 
-        button.addClickListener( () -> {
-            button.setVisible(false);
+        componentList.add(button);
+        componentList.add(button2);
+        componentList.add(button3);
+
+        MultipleComponentMenuHorizontal menuHorizontal = new MultipleComponentMenuHorizontal(
+                new Coordinates(0, 0),
+                new Dimension(500, 100),
+                componentList
+        );
+
+        menuHorizontal.setBackgroundColor(Color.RED);
+        menuHorizontal.setShadow(new Shadow(5, 5, 50));
+
+
+        FolderView folderView = new FolderView(new Coordinates(0, 200), new Dimension(300, 500), "/home/ferdistro/Projects/Private/ComponentCraft/src/main");
+        folderView.setShadow(new Shadow(4, 4, 10));
+
+        folderView.addFolderTriggerObserver( new FolderTriggerObserver() {
+
+            @Override
+            public void trigger(FolderTriggerEvent event, String path) {
+
+//                System.out.println(event);
+//                System.out.println(path);
+            }
         });
 
-//        MultipleComponentMenuHorizontal build1 = new ComponentBuilder()
-//                .setCoordinates(new Coordinates(200, 100))
-//                .setDimension(new Dimension(100, 200))
-//                .build(MultipleComponentMenuHorizontal.class);
 
 
 
-
-        CompCLabel label = new CompCLabelBuilder()
-                .addComponent(button)
+        new CompCLabelBuilder()
+                .addComponent(menuHorizontal)
+                .addComponent(folderView)
                 .addResizeListener(frame)
                 .addRepaintListener(frame)
-                .activateMouseAdapter(true)
-                .build();
+                .addToFrame(frame)
+                .setBackgroundColor(null)
+                .activateMouseAdapter(true).build();
 
 
+//        new Timer().scheduleAtFixedRate(
+//                new TimerTask() {
+//
+//                    long l = 0;
+//
+//                    CompCLabel label = null;
+//
+//
+//                    @Override
+//                    public void run() {
+//
+//                        String watchList = "component.Test";
+//
+//                        Class<?> aClass = null;
+//                        try {
+//                            aClass = Class.forName(watchList);
+//                        } catch (ClassNotFoundException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//                        String filePath = "src/main/java/" + aClass.getPackageName() + "/" + aClass.getName().split("\\.")[1] + ".java";
+//                        File file = new File(filePath);
+//
+//
+//                        if (l != file.lastModified()) {
+//
+//                            if (label != null) {
+//                                frame.remove(label);
+//                            }
+//                            try {
+//
+//
+//                                component.Test test = new component.Test();
+//                                CompCLabel label1 = test.returnCompCLabel(frame);
+//
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            l = file.lastModified();
+//                        }
+//
+//
+//                    }
+//                }
+//                , 0, 100);
 
-        label.addBeforeDraw(g -> g.drawString("Hello World", 100, 100));
 
-
-
-
-
-        frame.add(label);
         frame.setSize(800, 800);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -66,7 +152,9 @@ public class LibraryTest {
 
     }
 
-    @Test public void someLibraryMethodReturnsTrue() {
+
+    @Test
+    public void someLibraryMethodReturnsTrue() {
 
     }
 }

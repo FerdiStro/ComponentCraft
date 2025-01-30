@@ -2,7 +2,7 @@ package componentcraft.components.menu;
 
 
 import componentcraft.components.AbstractComponent;
-import componentcraft.components.Button;
+import componentcraft.components.actions.Button;
 import componentcraft.components.Shadow;
 import componentcraft.events.OnEvent;
 import componentcraft.events.componentObserver.ComponentObserver;
@@ -229,8 +229,8 @@ public class MultipleComponentMenuHorizontal extends AbstractComponent {
     int scrollPost = 0 ;
 
 
-    componentcraft.components.Button rightScroll = new componentcraft.components.Button(">");
-    componentcraft.components.Button leftScroll =  new Button("<");
+    Button rightScroll = new Button(">");
+    Button leftScroll =  new Button("<");
 
     @Setter
     @Getter

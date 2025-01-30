@@ -1,6 +1,7 @@
-package componentcraft.components;
+package componentcraft.components.actions;
 
 
+import componentcraft.components.AbstractComponent;
 import componentcraft.events.componentObserver.ComponentObserverType;
 import componentcraft.events.OnEvent;
 import componentcraft.events.componentObserver.Source;

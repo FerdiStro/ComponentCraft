@@ -2,6 +2,8 @@ package componentcraft.label;
 
 import componentcraft.components.AbstractComponent;
 import componentcraft.events.componentObserver.ComponentObserver;
+import componentcraft.label.util.Draw;
+import componentcraft.label.util.FirstRender;
 import lombok.Setter;
 
 import javax.swing.*;

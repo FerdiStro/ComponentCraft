@@ -89,7 +89,7 @@ public abstract class AbstractComponent {
         if(this.componentClickListener != null){
             componentClickListener.onEvent();
         }else {
-            logger.error("Component ClickListener is null");
+            logger.debug("Component ClickListener is null. Name:"+getName());
         }
     }
 

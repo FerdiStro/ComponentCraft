@@ -4,6 +4,7 @@ import componentcraft.components.AbstractComponent;
 import componentcraft.events.componentObserver.ComponentObserver;
 import componentcraft.events.componentObserver.ComponentObserverType;
 import componentcraft.events.componentObserver.Source;
+import componentcraft.label.util.Draw;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +41,9 @@ public class CompCLabelBuilder {
         @Override
         public void mouseClicked(MouseEvent e) {
             for(AbstractComponent component : componentList){
-                component.clickEvent(e);
+                if(component.isVisible()){
+                    component.clickEvent(e);
+                }
             }
         }
     };;

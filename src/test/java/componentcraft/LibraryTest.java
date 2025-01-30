@@ -5,28 +5,22 @@ package componentcraft;
 
 
 import componentcraft.components.AbstractComponent;
-import componentcraft.components.Button;
+import componentcraft.components.actions.Button;
 import componentcraft.components.Shadow;
 import componentcraft.components.builder.ComponentBuilder;
+import componentcraft.components.menu.folderview.FolderTriggerEvent;
+import componentcraft.components.menu.folderview.FolderTriggerObserver;
+import componentcraft.components.menu.folderview.FolderView;
 import componentcraft.components.menu.MultipleComponentMenuHorizontal;
-import componentcraft.label.CompCLabel;
 import componentcraft.label.CompCLabelBuilder;
 import componentcraft.util.Coordinates;
-import javassist.tools.reflect.Reflection;
-import jdk.dynalink.Operation;
 import org.junit.Test;
-import org.reflections.Reflections;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
+
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
 
 
 public class LibraryTest {
@@ -35,101 +29,120 @@ public class LibraryTest {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
 
-//        Button button = new ComponentBuilder()
-//                .addCustomConstructor("test")
-//                .setCoordinates(new Coordinates(50, 100))
-//                .setDimension(new Dimension(100, 200))
-//                .build(Button.class);
+
+        Button button = new ComponentBuilder()
+                .addCustomConstructor("test1")
+                .setCoordinates(new Coordinates(50, 100))
+                .setDimension(new Dimension(100, 200))
+                .build(Button.class);
+
+
+
+
+
+        Button button3 = new ComponentBuilder()
+                .addCustomConstructor("test2")
+                .setCoordinates(new Coordinates(50, 100))
+                .setDimension(new Dimension(100, 200))
+                .build(Button.class);
+
+        Button button2 = new Button(new Coordinates(200, 100), new Dimension(100, 200), "test2");
+        button2.setFancy(true);
+        button2.setStateButton();
+
+        button.setShadow(new Shadow(5, 5, 200));
+        button.setFancy(true);
+        button.setStateButton();
+
+
+        List<AbstractComponent> componentList = new ArrayList<>();
+
+        componentList.add(button);
+        componentList.add(button2);
+        componentList.add(button3);
+
+        MultipleComponentMenuHorizontal menuHorizontal = new MultipleComponentMenuHorizontal(
+                new Coordinates(0, 0),
+                new Dimension(500, 100),
+                componentList
+        );
+
+        menuHorizontal.setBackgroundColor(Color.RED);
+        menuHorizontal.setShadow(new Shadow(5, 5, 50));
+
+
+        FolderView folderView = new FolderView(new Coordinates(0, 200), new Dimension(300, 500), "/home/ferdistro/Projects/Private/ComponentCraft/src/main");
+        folderView.setShadow(new Shadow(4, 4, 10));
+
+        folderView.addFolderTriggerObserver( new FolderTriggerObserver() {
+
+            @Override
+            public void trigger(FolderTriggerEvent event, String path) {
+
+//                System.out.println(event);
+//                System.out.println(path);
+            }
+        });
+
+
+
+
+        new CompCLabelBuilder()
+                .addComponent(menuHorizontal)
+                .addComponent(folderView)
+                .addResizeListener(frame)
+                .addRepaintListener(frame)
+                .addToFrame(frame)
+                .setBackgroundColor(null)
+                .activateMouseAdapter(true).build();
+
+
+//        new Timer().scheduleAtFixedRate(
+//                new TimerTask() {
 //
-//        Button button2 =  new Button(new Coordinates(200, 100), new Dimension(100, 200), "test2");
-//        button2.setFancy(true);
-//        button2.setStateButton();
+//                    long l = 0;
 //
-//        button.setShadow(new Shadow(5, 5, 200));
-//        button.setFancy(true);
-//        button.setStateButton();
-
-
-//        MultipleComponentMenuHorizontal build1 = new ComponentBuilder()
-//                .setCoordinates(new Coordinates(200, 100))
-//                .setDimension(new Dimension(100, 200))
-//                .build(MultipleComponentMenuHorizontal.class);
-
-
-//        List<AbstractComponent> componentList = new ArrayList<>();
-//
-//        componentList.add(button);
-//        componentList.add(button2);
-//
-//        MultipleComponentMenuHorizontal menuHorizontal = new MultipleComponentMenuHorizontal(
-//                new Coordinates(0, 0),
-//                new Dimension( 500, 100),
-//                componentList
-//        );
-//
-//        menuHorizontal.setBackgroundColor(Color.RED);
-//        menuHorizontal.setShadow(new Shadow(5, 5, 50));
+//                    CompCLabel label = null;
 //
 //
+//                    @Override
+//                    public void run() {
+//
+//                        String watchList = "component.Test";
+//
+//                        Class<?> aClass = null;
+//                        try {
+//                            aClass = Class.forName(watchList);
+//                        } catch (ClassNotFoundException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//                        String filePath = "src/main/java/" + aClass.getPackageName() + "/" + aClass.getName().split("\\.")[1] + ".java";
+//                        File file = new File(filePath);
 //
 //
-//        CompCLabel label = new CompCLabelBuilder()
-//                .addComponent(menuHorizontal)
-////                .addComponent(button2)
-//                .addResizeListener(frame)
-//                .addRepaintListener(frame)
-//                .addToFrame(frame)
-//                .setBackgroundColor(null)
-//                .activateMouseAdapter(true)
-//                .build();
-
-
-        new Timer().scheduleAtFixedRate(
-                new TimerTask() {
-
-                    long l = 0;
-
-                    CompCLabel label = null;
-
-
-                    @Override
-                    public void run() {
-
-                        String watchList = "component.Test";
-
-                        Class<?> aClass = null;
-                        try {
-                            aClass = Class.forName(watchList);
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        String filePath = "src/main/java/" + aClass.getPackageName() + "/" + aClass.getName().split("\\.")[1] + ".java";
-                        File file = new File(filePath);
-
-
-                        if (l != file.lastModified()) {
-
-                            if (label != null) {
-                                frame.remove(label);
-                            }
-                            try {
-
-
-                                component.Test test = new component.Test();
-                                CompCLabel label1 = test.returnCompCLabel(frame);
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            l = file.lastModified();
-                        }
-
-
-                    }
-                }
-                , 0, 100);
+//                        if (l != file.lastModified()) {
+//
+//                            if (label != null) {
+//                                frame.remove(label);
+//                            }
+//                            try {
+//
+//
+//                                component.Test test = new component.Test();
+//                                CompCLabel label1 = test.returnCompCLabel(frame);
+//
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            l = file.lastModified();
+//                        }
+//
+//
+//                    }
+//                }
+//                , 0, 100);
 
 
         frame.setSize(800, 800);

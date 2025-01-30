@@ -18,7 +18,6 @@ public class DrawStringUtil {
         FontMetrics fontMetrics = g.getFontMetrics();
         int textWidth = fontMetrics.stringWidth(text);
 
-
 //        if(Logger.debugGraphics){
 //            g.drawRect( x + maxWidth / 2  - textWidth /2 , y - g.getFont().getSize(), textWidth, g.getFont().getSize());
 //        }
@@ -27,7 +26,7 @@ public class DrawStringUtil {
             String ellipsis = "...";
             int ellipsisWidth = fontMetrics.stringWidth(ellipsis);
 
-            int availableWidth = maxWidth - ellipsisWidth;
+            int availableWidth = maxWidth - ellipsisWidth - fontMetrics.stringWidth(ellipsis);
             int charIndex = 0;
 
             while (charIndex < text.length() && fontMetrics.stringWidth(text.substring(0, charIndex + 1)) <= availableWidth) {
